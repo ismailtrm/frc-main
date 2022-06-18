@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
     double turn = joystick.getRawAxis(Constans.joystick_turn) * 0.3;
     double speed = speedCore * 0.6;
 
-    double power = joystick.getRawButton(1);
+    double power = joystick.getRawButton(1); //xbox buton id gerekli
 
     double left = speed + turn;
     double right = speed - turn;
