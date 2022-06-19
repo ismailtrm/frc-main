@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -24,9 +25,11 @@ public class Robot extends TimedRobot {
   private VictorSP rightMotor1 = new VictorSP(Constans.rightMotorOne);
   private VictorSP rightMotor2 = new VictorSP(Constans.rightMotorTwo);
 
+  private VictorSP intakeMotor = new VictorSP(Constans.intakeMotor); //intake motor tanımlandı
+
   private PowerDistribution masterPD = new PowerDistribution(0, ModuleType.kCTRE); 
 
-  private CANSparkMax intakeMotor = new CANSparkMax(Constans.intakeDeviceID, MotorType.kBrushless);;
+  private CANSparkMax dropperMotor = new CANSparkMax(Constans.dropperDeviceID, MotorType.kBrushless); //sparkmax tanımmlandı?
 
   private Joystick joystick = new Joystick(0);
 
@@ -53,7 +56,9 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    
+  }
 
   @Override
   public void teleopPeriodic() {
@@ -62,7 +67,27 @@ public class Robot extends TimedRobot {
     double turn = joystick.getRawAxis(Constans.joystick_turn) * 0.3;
     double speed = speedCore * 0.6;
 
-    double power = joystick.getRawButton(1); //xbox buton id gerekli
+    boolean buttonMode = joystick.getRawButton(0); //xbox buton id gerekli
+    int p = 0;
+
+    if (buttonMode == true){  //joystick butonuu true-false olarak tanımlandı
+    while(p=50){            //intake ve dropper arttrılır
+      
+      p++;
+      double power = p;
+      intakeMotor.set(power*0.1);
+      dropperMotor.set(power*0.1);
+
+      try {
+        Thread.sleep(20);
+    } catch (InterruptedException ie) {
+        Thread.currentThread().interrupt();
+    }
+    }
+     
+    }else{
+      p = 0;
+    }
 
     double left = speed + turn;
     double right = speed - turn;
@@ -81,7 +106,7 @@ public class Robot extends TimedRobot {
     rightMotor1.set(-right);
     rightMotor2.set(-right);
 
-    intakeMotor.set(power);
+
   }
 
   @Override
@@ -95,11 +120,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    rightMotor1.set(-1);
-    rightMotor2.set(-1);
+    rightMotor1.set(-0.5);
+    rightMotor2.set(-0.5);
     
-    leftMotor1.set(1);
-    leftMotor2.set(1);
+    leftMotor1.set(0.5);
+    leftMotor2.set(0.5);
+    intakeMotor.set(-0.3);
+    dropperMotor.set(1);
   }
 
   @Override
