@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     int p = 0;
 
     if (buttonMode == true){  //joystick butonuu true-false olarak tanımlandı
-    while(p=50){            //intake ve dropper arttrılır
+    while(p==50){            //intake ve dropper arttrılır
       
       p++;
       double power = p;
