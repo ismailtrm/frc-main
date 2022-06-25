@@ -4,14 +4,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-
 //import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -21,6 +19,7 @@ public class Robot extends TimedRobot {
 
   private VictorSP leftMotor1 = new VictorSP(Constans.leftMotorOne);
   private VictorSP leftMotor2 = new VictorSP(Constans.leftMotorTwo);
+
   private VictorSP rightMotor1 = new VictorSP(Constans.rightMotorOne);
   private VictorSP rightMotor2 = new VictorSP(Constans.rightMotorTwo);
 
@@ -69,24 +68,23 @@ public class Robot extends TimedRobot {
     double speed = speedCore * 0.6;
 
     boolean buttonMode = joystick.getRawButton(0); //xbox buton id gerekli
+    
     int p = 0;
+    if (buttonMode == true){  
 
-    if (buttonMode == true){  //joystick butonuu true-false olarak tanımlandı
-    while(p==50){            //intake ve dropper arttrılır
-      
-      p++;
-      intakeMotor.set(p*0.1);
-      dropperMotor.set(p*0.1);
-
-      try {
-        Thread.sleep(20);
-    } catch (InterruptedException ie) {
-        Thread.currentThread().interrupt();
-    }
+      while(p==50){                 //50 birim olana kadar her 20 milisaniyede bir birim arttırılır-- 
+        p++;                        //--işlem(charge time) 1000milisaniyede(1 saniye) tamamlanır.
+        intakeMotor.set(p*0.1);
+        dropperMotor.set(p*0.1);
+        try {                        
+          Thread.sleep(20);           
+        } catch (InterruptedException ie) {
+          Thread.currentThread().interrupt();
+        }
     }
      
     }else{
-      p = 0;
+    p = 0;
     }
 
     double left = speed + turn;
@@ -106,7 +104,6 @@ public class Robot extends TimedRobot {
     rightMotor1.set(-right);
     rightMotor2.set(-right);
 
-
   }
 
   @Override
@@ -122,9 +119,10 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     rightMotor1.set(-0.5);
     rightMotor2.set(-0.5);
-    
+
     leftMotor1.set(0.5);
     leftMotor2.set(0.5);
+
     intakeMotor.set(-0.3);
     dropperMotor.set(1);
   }
