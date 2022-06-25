@@ -74,9 +74,8 @@ public class Robot extends TimedRobot {
     while(p==50){            //intake ve dropper arttrılır
       
       p++;
-      double power = p;
-      intakeMotor.set(power*0.1);
-      dropperMotor.set(power*0.1);
+      intakeMotor.set(p*0.1);
+      dropperMotor.set(p*0.1);
 
       try {
         Thread.sleep(20);
