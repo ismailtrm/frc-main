@@ -3,7 +3,8 @@ package frc.robot;
 public class Constans {
     //Motor Ports:
 
-    public static final int intakeDeviceID = 2;
+    public static final int intakeMotor = 4;
+    public static final int dropperMotor = 0;
 
     public static final int rightMotorOne = 2;
     public static final int rightMotorTwo = 3;

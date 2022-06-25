@@ -21,15 +21,16 @@ public class Robot extends TimedRobot {
 
   private VictorSP leftMotor1 = new VictorSP(Constans.leftMotorOne);
   private VictorSP leftMotor2 = new VictorSP(Constans.leftMotorTwo);
-  
   private VictorSP rightMotor1 = new VictorSP(Constans.rightMotorOne);
   private VictorSP rightMotor2 = new VictorSP(Constans.rightMotorTwo);
 
   private VictorSP intakeMotor = new VictorSP(Constans.intakeMotor); //intake motor tanımlandı
 
-  private PowerDistribution masterPD = new PowerDistribution(0, ModuleType.kCTRE); 
+  private PowerDistribution masterPD = new PowerDistribution(0, ModuleType.kCTRE);
 
-  private CANSparkMax dropperMotor = new CANSparkMax(Constans.dropperDeviceID, MotorType.kBrushless); //sparkmax tanımmlandı?
+  private CANSparkMax dropperMotor = new CANSparkMax(Constans.dropperMotor, MotorType.kBrushless); //sparkmax tanımmlandı?
+  
+  //dropperMotor.restoreFactoryDefaults();
 
   private Joystick joystick = new Joystick(0);
 
