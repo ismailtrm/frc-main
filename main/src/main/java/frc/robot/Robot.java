@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
@@ -34,20 +36,32 @@ public class Robot extends TimedRobot {
   private Joystick joystick = new Joystick(0);
 
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    if(dropperMotor.setIdleMode(IdleMode.kCoast) != REVLibError.kOk){
+      SmartDashboard.putString("Idle Mode", "Error");
+    }
+
+    /**
+     * Similarly, parameters will have a Get method which allows you to retrieve their values
+     * from the controller
+     */
+    if(dropperMotor.getIdleMode() == IdleMode.kCoast) {
+      SmartDashboard.putString("Idle Mode", "Coast");
+    } else {
+      SmartDashboard.putString("Idle Mode", "Brake");
+    }
+
+    // Set ramp rate to 0
+    if(dropperMotor.setOpenLoopRampRate(0) != REVLibError.kOk) {
+      SmartDashboard.putString("Ramp Rate", "Error");
+    }
+
+    // read back ramp rate value
+    SmartDashboard.putNumber("Ramp Rate", dropperMotor.getOpenLoopRampRate());
+  }
 
   @Override
-  public void robotPeriodic() {
-
-    SmartDashboard.putNumber("Temperature", masterPD.getTemperature());
-
-    SmartDashboard.putNumber("Right Front Motor Current", masterPD.getCurrent(0));
-    SmartDashboard.putNumber("Right Rear Motor Current", masterPD.getCurrent(1));
-
-    SmartDashboard.putNumber("Left Front Motor Current", masterPD.getCurrent(2));
-    SmartDashboard.putNumber("Left Rear Motor Current", masterPD.getCurrent(3));
-
-  }
+  public void robotPeriodic() {}
 
   @Override
   public void autonomousInit() {}
@@ -67,29 +81,14 @@ public class Robot extends TimedRobot {
     double turn = joystick.getRawAxis(Constans.joystick_turn) * 0.3;
     double speed = speedCore * 0.6;
 
-    boolean buttonMode = joystick.getRawButton(0); //xbox buton id gerekli
-    
-    int p = 0;
-    if (buttonMode == true){  
-
-      while(p==50){                 //50 birim olana kadar her 20 milisaniyede bir birim arttırılır-- 
-        p++;                        //--işlem(charge time) 1000milisaniyede(1 saniye) tamamlanır.
-        intakeMotor.set(p*0.1);
-        dropperMotor.set(p*0.1);
-        try {                        
-          Thread.sleep(20);           
-        } catch (InterruptedException ie) {
-          Thread.currentThread().interrupt();
-        }
-    }
-     
-    }else{
-    p = 0;
-    }
+    boolean butonMode = joystick.getRawButton(3);
+    boolean buttonDropper = joystick.getRawButton(2); //xbox buton id gerekli
+    boolean buttonIntake = joystick.getRawButton(1);
 
     double left = speed + turn;
     double right = speed - turn;
-    
+  
+
     if (Math.abs(speed) < 0.1) {
       speed = 0;
     }
@@ -98,11 +97,45 @@ public class Robot extends TimedRobot {
      turn = 0;
     }
     
-    leftMotor1.set(left);
-    leftMotor2.set(left);
-    
-    rightMotor1.set(-right);
-    rightMotor2.set(-right);
+    if (joystick.isConnected()){
+
+      leftMotor1.set(left);
+      leftMotor2.set(left);
+      
+      rightMotor1.set(-right);
+      rightMotor2.set(-right);
+  
+      //intake
+      if (buttonIntake == true) {
+        intakeMotor.set(-0.4);
+      }
+      else{
+        intakeMotor.set(0);
+      }
+      
+      //dropper
+      if (buttonDropper == true){  
+        dropperMotor.set(1);
+      }else{
+        dropperMotor.set(0);
+      }
+
+      //cift
+      if(butonMode == true){
+        dropperMotor.set(1);
+        intakeMotor.set(-0.4);
+      }
+      else{
+        dropperMotor.set(0);
+        intakeMotor.set(0);
+      }
+      SmartDashboard.putNumber("Voltage", dropperMotor.getBusVoltage());
+      SmartDashboard.putNumber("Temperature", dropperMotor.getMotorTemperature());
+      SmartDashboard.putNumber("Output", dropperMotor.getAppliedOutput());
+      
+     
+    }
+  
 
   }
 
@@ -117,11 +150,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    rightMotor1.set(-0.5);
-    rightMotor2.set(-0.5);
-
-    leftMotor1.set(0.5);
-    leftMotor2.set(0.5);
 
     intakeMotor.set(-0.3);
     dropperMotor.set(1);
