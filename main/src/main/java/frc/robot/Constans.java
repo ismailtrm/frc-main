@@ -1,17 +1,16 @@
 package frc.robot;
 
-public class Constans {
-    //Motor Ports:
+public class Constants {
+    // Motor Ports
+    public static final int INTAKE_MOTOR = 4;
+    public static final int DROPPER_MOTOR = 0;
+    public static final int RIGHT_MOTOR_ONE = 2;
+    public static final int RIGHT_MOTOR_TWO = 3;
+    public static final int LEFT_MOTOR_ONE = 0;
+    public static final int LEFT_MOTOR_TWO = 1;
 
-    public static final int intakeMotor = 4;
-    public static final int dropperMotor = 0;
-
-    public static final int rightMotorOne = 2;
-    public static final int rightMotorTwo = 3;
-    public static final int leftMotorOne = 0;
-    public static final int leftMotorTwo = 1;
-    //Joystick Ports:
-    public static final int joystick_turn = 0;
-    public static final int joystick_forward = 3;
-    public static final int joystick_reverse = 2;
+    // Joystick Ports
+    public static final int JOYSTICK_TURN = 0;
+    public static final int JOYSTICK_FORWARD = 3;
+    public static final int JOYSTICK_REVERSE = 2;
 }
